@@ -1,414 +1,215 @@
-/* Table Styles */
+/* ================================================================
+   Table — Tema Dark (alineado con DocControl)
+   Cubre .excel-table, .table-header, .table-row, .table-cell
+   y variantes de Personal y Callejoneadas.
+   ================================================================ */
+
+/* ── Wrapper ────────────────────────────────────────────────── */
 .excel-table {
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 15px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  background: #1e2537;
+  border: 1px solid rgba(255, 255, 255, .06);
+  border-radius: 14px;
   overflow: hidden;
-  backdrop-filter: blur(10px);
 }
 
+/* ── Header row ─────────────────────────────────────────────── */
 .table-header {
-  background: #34495e;
-  color: white;
-  padding: 18px 20px;
   display: grid;
-  gap: 1px;
+  background: rgba(255, 255, 255, .03);
+  border-bottom: 1px solid rgba(255, 255, 255, .07);
+  padding: 0 4px;
+}
+
+.table-header > div {
+  padding: 12px 14px;
+  font-size: .72rem;
   font-weight: 600;
-  font-size: 14px;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.personal-header {
-  grid-template-columns: 60px 1fr 1fr 1fr 1fr 1.5fr 1fr 1fr 1fr 120px;
-}
-
-/* ✅ Grid para callejoneadas con más espacio para fechas */
-.callejoneadas-header {
-  grid-template-columns: 60px 1fr 1.5fr 1fr 1fr 2fr 1fr 120px;
-}
-
+/* ── Body ───────────────────────────────────────────────────── */
 .table-body {
-  max-height: 600px;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
+/* ── Row ────────────────────────────────────────────────────── */
 .table-row {
   display: grid;
-  gap: 1px;
-  border-bottom: 1px solid #ecf0f1;
-  padding: 15px 20px;
   align-items: center;
-  transition: background-color 0.2s ease;
-}
-
-.personal-row {
-  grid-template-columns: 60px 1fr 1fr 1fr 1fr 1.5fr 1fr 1fr 1fr 120px;
-}
-
-/* ✅ Grid para filas de callejoneadas */
-.callejoneadas-row {
-  grid-template-columns: 60px 1fr 1.5fr 1fr 1fr 2fr 1fr 120px;
-}
-
-.table-row:hover {
-  background: #f8f9fa;
+  border-bottom: 1px solid rgba(255, 255, 255, .04);
+  padding: 0 4px;
+  transition: background .15s;
 }
 
 .table-row:last-child {
   border-bottom: none;
 }
 
+.table-row:hover {
+  background: rgba(255, 255, 255, .025);
+}
+
+/* ── Cell ───────────────────────────────────────────────────── */
 .table-cell {
-  padding: 10px 8px;
-  font-size: 14px;
-  word-wrap: break-word;
+  padding: 12px 14px;
+  font-size: .855rem;
+  color: #cbd5e1;
+  overflow: hidden;
+  word-break: break-word;
 }
 
-/* Status Badges */
-.estatus-pagada {
-  background: #d4edda;
-  color: #155724;
-  padding: 6px 12px;
-  border-radius: 20px;
+.table-cell strong {
+  color: #f1f5f9;
   font-weight: 600;
-  text-align: center;
-  font-size: 12px;
-  border: 1px solid #c3e6cb;
 }
 
-.estatus-deuda {
-  background: #f8d7da;
-  color: #721c24;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-weight: 600;
-  text-align: center;
-  font-size: 12px;
-  border: 1px solid #f5c6cb;
+/* small secondary text inside cells */
+.table-cell [style*="font-size:12px"],
+.table-cell [style*="font-size: 12px"] {
+  color: #64748b !important;
+  font-size: .78rem !important;
 }
 
-/* Action Buttons */
-.actions {
+/* ── Personal table columns ─────────────────────────────────── */
+.personal-header,
+.personal-row {
+  grid-template-columns:
+    52px          /* ID        */
+    1fr           /* Nombre    */
+    1fr           /* Apellido  */
+    1.2fr         /* Cargo     */
+    1.2fr         /* Compañía  */
+    1.6fr         /* Email     */
+    1fr           /* Teléfono  */
+    1fr           /* Salario   */
+    1.1fr         /* Fecha     */
+    90px;         /* Acciones  */
+}
+
+/* ── Callejoneadas table columns ────────────────────────────── */
+.callejoneadas-header,
+.callejoneadas-row {
+  grid-template-columns:
+    48px          /* ID          */
+    1.1fr         /* Fechas      */
+    1.6fr         /* Lugares/Hrs */
+    100px         /* Estatus     */
+    2fr           /* Desc/Part.  */
+    90px          /* Costo       */
+    80px;         /* Acciones    */
+}
+
+/* ── Histórico modal table ──────────────────────────────────── */
+.hist-table .table-header,
+.hist-table .table-row {
+  grid-template-columns:
+    44px           /* ID       */
+    1.6fr          /* Nombre   */
+    1.1fr          /* Cargo    */
+    1.1fr          /* Compañía */
+    60px           /* Total    */
+    70px           /* Pagadas  */
+    80px           /* En deuda */
+    1fr            /* Última   */
+    80px;          /* Rango    */
+}
+
+.col-id       { text-align: center; }
+.col-num      { text-align: center; }
+.col-nombre   { font-weight: 600; }
+.col-cargo    { color: #94a3b8 !important; }
+.col-compania { }
+.col-fecha    { color: #64748b !important; font-size: .8rem !important; }
+.col-rango    { text-align: center; }
+
+/* ── Actions cell ───────────────────────────────────────────── */
+.table-cell.actions {
   display: flex;
-  gap: 8px;
-  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
 }
 
+/* ── Action buttons ─────────────────────────────────────────── */
 .action-btn {
-  padding: 8px 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
   border: none;
-  border-radius: 6px;
   cursor: pointer;
-  font-size: 12px;
-  transition: all 0.2s ease;
-  min-width: 40px;
+  font-size: .9rem;
+  transition: all .2s;
+  line-height: 1;
+  background: transparent;
 }
 
 .btn-edit {
-  background: #3498db;
-  color: white;
+  background: rgba(79, 110, 247, .12);
+  color: #818cf8;
+  border: 1px solid rgba(79, 110, 247, .2);
+}
+.btn-edit:hover {
+  background: rgba(79, 110, 247, .22);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(79, 110, 247, .2);
 }
 
 .btn-delete {
-  background: #e74c3c;
-  color: white;
+  background: rgba(248, 113, 113, .1);
+  color: #f87171;
+  border: 1px solid rgba(248, 113, 113, .18);
 }
-
-.action-btn:hover {
+.btn-delete:hover {
+  background: rgba(248, 113, 113, .2);
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 3px 10px rgba(248, 113, 113, .2);
 }
 
-/* ✅ Responsive Tables - SIN @media anidado */
-@media (max-width: 1200px) {
+/* ── Empty state inside table ───────────────────────────────── */
+.table-body .empty-state {
+  grid-column: 1 / -1;
+}
+
+/* ── Scrollbar for table wrapper ────────────────────────────── */
+.excel-table::-webkit-scrollbar        { height: 6px; }
+.excel-table::-webkit-scrollbar-track  { background: transparent; }
+.excel-table::-webkit-scrollbar-thumb  { background: rgba(255,255,255,.1); border-radius: 3px; }
+.excel-table::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.2); }
+
+/* ── Responsive: allow horizontal scroll on small screens ───── */
+@media (max-width: 900px) {
+  .excel-table {
+    overflow-x: auto;
+  }
 
   .personal-header,
   .personal-row {
-    grid-template-columns: 50px 1fr 1fr 1fr 1fr 1.5fr;
-  }
-
-  .personal-header div:nth-child(n+7),
-  .personal-row div:nth-child(n+7) {
-    display: none;
+    grid-template-columns:
+      44px 120px 110px 110px 110px 160px 110px 90px 110px 80px;
+    min-width: 1050px;
   }
 
   .callejoneadas-header,
   .callejoneadas-row {
-    grid-template-columns: 50px 1fr 1.5fr 1fr 1fr;
-  }
-
-  .callejoneadas-header div:nth-child(n+6),
-  .callejoneadas-row div:nth-child(n+6) {
-    display: none;
+    grid-template-columns:
+      44px 120px 180px 100px 220px 90px 76px;
+    min-width: 830px;
   }
 }
 
-@media (max-width: 768px) {
-
-  .table-header,
-  .table-row {
-    grid-template-columns: 1fr;
-    gap: 10px;
+@media (max-width: 600px) {
+  .table-header > div,
+  .table-cell {
+    padding: 10px 10px;
+    font-size: .8rem;
   }
-
-  .table-header div,
-  .table-row div {
-    display: block !important;
-    text-align: left;
-  }
-
-  .table-header div::before,
-  .table-row div::before {
-    content: attr(data-label);
-    font-weight: bold;
-    display: block;
-    margin-bottom: 5px;
-    color: #7f8c8d;
-    font-size: 12px;
-  }
-
-  .actions {
-    justify-content: flex-start;
-  }
-}
-
-/* Empty State */
-.empty-state {
-  text-align: center;
-  padding: 60px 20px;
-  color: #7f8c8d;
-}
-
-.empty-state .icon {
-  font-size: 4em;
-  margin-bottom: 20px;
-  opacity: 0.5;
-}
-
-.empty-state h3 {
-  margin-bottom: 10px;
-  color: #34495e;
-}
-
-.empty-state p {
-  margin-bottom: 20px;
-}
-
-/* ===== HISTÓRICO ===== */
-.hist-toolbar {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  justify-content: space-between;
-  margin: 6px 0 12px;
-}
-
-.hist-toolbar .filters {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.hist-summary {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  margin-bottom: 10px;
-}
-
-.hist-summary .card {
-  background: #f8fafc;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  padding: 10px 12px;
-}
-
-.hist-summary .kpi {
-  font-size: 22px;
-  font-weight: 700;
-  margin-top: 4px;
-}
-
-/* ======= FIX scroll/alineación para histórico ======= */
-/* El contenedor del histórico maneja el scroll para que el header sticky quede alineado */
-.excel-table.hist-table {
-  overflow-x: auto;
-  overflow-y: auto;
-  /* vertical también, si hay muchas filas */
-  max-height: 60vh;
-  /* ajusta según tu modal */
-  border-radius: 10px;
-}
-
-/* Misma rejilla para header y filas + ancho mínimo común */
-.excel-table.hist-table .table-header,
-.excel-table.hist-table .table-row {
-  display: grid;
-  grid-template-columns:
-    70px
-    /* ID */
-    220px
-    /* Nombre */
-    170px
-    /* Cargo */
-    170px
-    /* Compañía */
-    80px
-    /* Total */
-    90px
-    /* Pagadas */
-    90px
-    /* En deuda */
-    120px
-    /* Última fecha */
-    110px;
-  /* Rango */
-  column-gap: 10px;
-  min-width: 1200px;
-  /* suma de columnas + gaps => evita saltos */
-  box-sizing: border-box;
-}
-
-/* Header sticky dentro del MISMO contenedor que scrollea */
-.excel-table.hist-table .table-header {
-  position: sticky;
-  top: 0;
-  z-index: 2;
-  background: #2f455b;
-  /* tono más oscuro para header */
-  color: #fff;
-}
-
-/* Anular el scroll del body SOLO dentro del histórico para evitar doble scroll */
-.excel-table.hist-table .table-body {
-  max-height: unset;
-  overflow: visible;
-}
-
-.hist-table .table-row {
-  align-items: center;
-}
-
-.hist-table .table-body .table-row:nth-child(odd) {
-  background: #fbfdff;
-}
-
-.hist-table .table-body .table-row:nth-child(even) {
-  background: #f5f7fb;
-}
-
-/* ======= STICKY columnas ID + Nombre al hacer scroll horizontal ======= */
-.hist-table .col-id,
-.hist-table .table-header .col-id {
-  position: sticky;
-  left: 0;
-  z-index: 3;
-}
-.hist-table .col-nombre,
-.hist-table .table-header .col-nombre {
-  position: sticky;
-  left: 80px; /* 70px col-id + 10px gap */
-  z-index: 3;
-}
-
-/* Fondo del header sticky */
-.hist-table .table-header .col-id,
-.hist-table .table-header .col-nombre {
-  background: #2f455b;
-  z-index: 4;
-}
-
-/* Fondo de filas impares sticky */
-.hist-table .table-body .table-row:nth-child(odd) .col-id,
-.hist-table .table-body .table-row:nth-child(odd) .col-nombre {
-  background: #fbfdff;
-}
-
-/* Fondo de filas pares sticky */
-.hist-table .table-body .table-row:nth-child(even) .col-id,
-.hist-table .table-body .table-row:nth-child(even) .col-nombre {
-  background: #f5f7fb;
-}
-
-/* Hover override para sticky cells */
-.hist-table .table-body .table-row:hover .col-id,
-.hist-table .table-body .table-row:hover .col-nombre {
-  background: #eef2ff;
-}
-
-/* Sombra sutil al scroll horizontal para indicar que hay sticky */
-.hist-table .col-nombre::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: -6px;
-  bottom: 0;
-  width: 6px;
-  background: linear-gradient(90deg, rgba(0,0,0,0.06), transparent);
-  pointer-events: none;
-}
-.hist-table .col-nombre {
-  position: sticky;
-  left: 80px;
-  z-index: 3;
-}
-
-.col-num {
-  text-align: right;
-}
-
-.col-fecha {
-  white-space: nowrap;
-}
-
-.col-rango {
-  text-align: center;
-}
-
-.chip {
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: #eef2ff;
-  color: #3730a3;
-  font-size: 12px;
-  border: 1px solid #e0e7ff;
-}
-
-/* Badges rango */
-.badge {
-  display: inline-block;
-  padding: 3px 8px;
-  border-radius: 10px;
-  font-size: 12px;
-}
-
-.badge-gray {
-  background: #eee;
-  color: #555;
-}
-
-.badge-blue {
-  background: #e6f0ff;
-  color: #1a56db;
-}
-
-.badge-green {
-  background: #e9f7ef;
-  color: #1e7e34;
-}
-
-.badge-orange {
-  background: #fff4e6;
-  color: #d9480f;
-}
-
-.badge-purple {
-  background: #f3e8ff;
-  color: #6b21a8;
-}
-
-/* Mejoras pequeñas */
-.table-body .table-cell b {
-  font-weight: 700;
 }
