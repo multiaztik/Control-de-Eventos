@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Callejoneadas</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/components/modal.css">
+  <link rel="stylesheet" href="/css/components/table.css">
+  <style>
+    /* ═══ Filtros Avanzados ═══ */
+    .filtros-panel {
+      background: rgba(255, 255, 255, 0.97);
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+      margin-bottom: 20px;
+      border: 1px solid rgba(102, 126, 234, 0.15);
+      backdrop-filter: blur(12px);
+      animation: slideDown 0.3s ease;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .filtros-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid rgba(102, 126, 234, 0.15);
+    }
+
+    .filtros-header h3 {
+      color: #2c3e50;
+      font-size: 1.15em;
+      margin: 0;
+    }
+
+    .filtros-acciones {
+      display: flex;
+      gap: 8px;
+    }
+
+    .filtros-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .filtro-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .filtro-group label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #7f8c8d;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .filtro-group select,
+    .filtro-group input {
+      padding: 9px 12px;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      font-size: 13px;
+      transition: all 0.2s ease;
+      background: #fff;
+    }
+
+    .filtro-group select:focus,
+    .filtro-group input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.12);
+    }
+
+    .filtros-rapidos {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .btn-chip {
+      background: rgba(102, 126, 234, 0.1);
+      color: #667eea;
+      border: 1px solid rgba(102, 126, 234, 0.2);
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-chip:hover {
+      background: #667eea;
+      color: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+    .filtros-resultado {
+      background: rgba(52, 152, 219, 0.08);
+      color: #2980b9;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      text-align: center;
+      border: 1px solid rgba(52, 152, 219, 0.15);
+    }
+
+    .filtros-resultado span {
+      font-size: 20px;
+      font-weight: 800;
+      color: #2c3e50;
+    }
+
+    .btn-sm {
+      padding: 7px 16px;
+      font-size: 13px;
+    }
+
+    @media (max-width: 768px) {
+      .filtros-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .filtros-header {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🍻 Registro de Callejoneadas</h1>
+      <p>Gestiona tus salidas y eventos sociales</p>
+      <a href="/" class="btn btn-secondary">🏠 Volver al Inicio</a>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn btn-warning" onclick="CallejoneadasUI.agregar()">
+        🍻 Nueva Callejoneada
+      </button>
+      <button class="btn btn-primary" onclick="CallejoneadasUI.cargar()">
+        🔄 Actualizar
+      </button>
+      <button class="btn btn-success" onclick="CallejoneadasUI.generarReporte()">
+        📊 Generar Reporte Excel
+      </button>
+      <div style="flex-grow: 1;"></div>
+      <button class="btn btn-secondary" id="btnToggleFiltros" onclick="CallejoneadasUI.toggleFiltros()">
+        🔍 Filtros Avanzados
+      </button>
+    </div>
+
+    <!-- ═════════ PANEL DE FILTROS AVANZADOS ═════════ -->
+    <div class="filtros-panel" id="filtrosPanel" style="display:none;">
+      <div class="filtros-header">
+        <h3>🔍 Filtros Avanzados</h3>
+        <div class="filtros-acciones">
+          <button class="btn btn-primary btn-sm" onclick="CallejoneadasUI.aplicarFiltros()">✅ Aplicar Filtros</button>
+          <button class="btn btn-secondary btn-sm" onclick="CallejoneadasUI.limpiarFiltros()">🧹 Limpiar</button>
+        </div>
+      </div>
+
+      <div class="filtros-grid">
+        <!-- Estatus -->
+        <div class="filtro-group">
+          <label for="filtro_estatus">📌 Estatus</label>
+          <select id="filtro_estatus">
+            <option value="">— Todos —</option>
+            <option value="Pagada">✅ Pagada</option>
+            <option value="En deuda">❌ En deuda</option>
+          </select>
+        </div>
+
+        <!-- Fecha Desde -->
+        <div class="filtro-group">
+          <label for="filtro_fecha_desde">📅 Desde</label>
+          <input type="date" id="filtro_fecha_desde">
+        </div>
+
+        <!-- Fecha Hasta -->
+        <div class="filtro-group">
+          <label for="filtro_fecha_hasta">📅 Hasta</label>
+          <input type="date" id="filtro_fecha_hasta">
+        </div>
+
+        <!-- Participante -->
+        <div class="filtro-group">
+          <label for="filtro_participante">👤 Participante</label>
+          <select id="filtro_participante">
+            <option value="">— Todos —</option>
+            <!-- Se llena dinámicamente -->
+          </select>
+        </div>
+
+        <!-- Lugar -->
+        <div class="filtro-group">
+          <label for="filtro_lugar">📍 Lugar</label>
+          <input type="text" id="filtro_lugar" placeholder="Buscar por lugar...">
+        </div>
+
+        <!-- Costo Mín -->
+        <div class="filtro-group">
+          <label for="filtro_costo_min">💰 Costo mín</label>
+          <input type="number" id="filtro_costo_min" min="0" step="0.01" placeholder="0.00">
+        </div>
+
+        <!-- Costo Máx -->
+        <div class="filtro-group">
+          <label for="filtro_costo_max">💰 Costo máx</label>
+          <input type="number" id="filtro_costo_max" min="0" step="0.01" placeholder="999999">
+        </div>
+
+        <!-- Búsqueda texto libre -->
+        <div class="filtro-group">
+          <label for="buscar">🔎 Búsqueda libre</label>
+          <input type="text" id="buscar" placeholder="Buscar en resultados..." onkeyup="CallejoneadasUI.filtrarLocal()">
+        </div>
+      </div>
+
+      <!-- Accesos rápidos -->
+      <div class="filtros-rapidos">
+        <span style="color: #7f8c8d; font-weight: 600; font-size: 13px;">Filtros rápidos:</span>
+        <button class="btn-chip" onclick="CallejoneadasUI.filtroRapido('deudas')">❌ Solo en deuda</button>
+        <button class="btn-chip" onclick="CallejoneadasUI.filtroRapido('pagadas')">✅ Solo pagadas</button>
+        <button class="btn-chip" onclick="CallejoneadasUI.filtroRapido('este_mes')">📅 Este mes</button>
+        <button class="btn-chip" onclick="CallejoneadasUI.filtroRapido('mes_pasado')">📅 Mes pasado</button>
+        <button class="btn-chip" onclick="CallejoneadasUI.filtroRapido('este_anio')">📆 Este año</button>
+      </div>
+
+      <!-- Contador de resultados -->
+      <div class="filtros-resultado" id="filtrosResultado" style="display:none;">
+        <span id="filtrosConteo">0</span> callejoneadas encontradas
+      </div>
+    </div>
+
+    <div id="status"></div>
+
+    <div class="excel-table">
+      <div class="table-header callejoneadas-header">
+        <div>ID</div>
+        <div>Fechas</div>
+        <div>Lugares y Horas</div>
+        <div>Estatus</div>
+        <div>Descripción y Participantes</div>
+        <div>Costo</div>
+        <div>Acciones</div>
+      </div>
+      <div class="table-body" id="tablaCallejoneadas">
+        <!-- Los datos se cargarán dinámicamente -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para Callejoneadas -->
+  <div class="modal" id="modalCallejoneada">
+    <div class="modal-content">
+      <h3 id="modalTitulo">🍻 Nueva Callejoneada</h3>
+      <div class="required-note">* Campos obligatorios</div>
+      <form id="formCallejoneada" onsubmit="CallejoneadasUI.guardar(event)">
+        <div class="form-group">
+          <label>Lugar de inicio:</label>
+          <input type="text" id="lugar_inicio" placeholder="Ej: Plaza de Armas" required>
+        </div>
+
+        <div class="form-group">
+          <label>Lugar de fin:</label>
+          <input type="text" id="lugar_fin" placeholder="Ej: Cantina El Callejón" required>
+        </div>
+
+        <div class="form-group">
+          <label>Fecha del Evento:</label>
+          <input type="date" id="fecha_evento" required>
+        </div>
+
+        <div class="form-group">
+          <label>Hora de inicio:</label>
+          <input type="time" id="hora_inicio" required>
+        </div>
+
+        <div class="form-group">
+          <label>Hora de fin:</label>
+          <input type="time" id="hora_fin" required>
+        </div>
+
+        <div class="form-group optional">
+          <label>Fecha de Pago:</label>
+          <input type="date" id="fecha_pago">
+          <div class="help-text">Solo para callejoneadas pagadas</div>
+        </div>
+
+        <div class="form-group">
+          <label>Estatus:</label>
+          <select id="estatus" required>
+            <option value="">Seleccionar...</option>
+            <option value="Pagada">✅ Pagada</option>
+            <option value="En deuda">❌ En deuda</option>
+          </select>
+        </div>
+
+        <div class="form-group optional">
+          <label>Descripción:</label>
+          <textarea id="descripcion" placeholder="Ej: Fiesta de cumpleaños..." rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Participantes (máximo 4): *</label>
+          <div id="personal_checkboxes_container" class="checkbox-list-container">
+            <!-- Los checkboxes se cargarán dinámicamente aquí -->
+            <p class="loading-text">Cargando personal...</p>
+          </div>
+          <div class="help-text">Selecciona hasta 4 participantes para este evento</div>
+        </div>
+
+        <div class="form-group optional">
+          <label>Costo:</label>
+          <input type="number" id="costo" step="0.01" min="0" placeholder="0.00">
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-success">Guardar Callejoneada</button>
+          <button type="button" class="btn btn-danger" onclick="Modal.close('modalCallejoneada')">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="/js/api.js"></script>
+  <script type="module" src="/js/components/modal.js"></script>
+  <script type="module" src="/js/components/validation.js"></script>
+  <script type="module" src="/js/callejoneadas.js"></script>
+</body>
+
+</html>

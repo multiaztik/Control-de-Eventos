@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="DocControl — Gestión de documentos escaneados por empleado." />
+  <title>DocControl — Gestión de Documentos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/doccontrol.css" />
+</head>
+
+<body class="dc-body">
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="dc-sidebar" id="dcSidebar">
+    <div class="dc-sidebar-header">
+      <div class="dc-logo">
+        <div class="dc-logo-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="16" y1="13" x2="8" y2="13" />
+            <line x1="16" y1="17" x2="8" y2="17" />
+          </svg>
+        </div>
+        <span class="dc-logo-text">DocControl</span>
+      </div>
+      <button class="dc-sidebar-toggle" id="dcSidebarToggle" title="Colapsar menú">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      </button>
+    </div>
+
+    <nav class="dc-sidebar-nav">
+      <button class="dc-nav-item active" data-view="dashboard" id="nav-dashboard">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7" />
+          <rect x="14" y="3" width="7" height="7" />
+          <rect x="3" y="14" width="7" height="7" />
+          <rect x="14" y="14" width="7" height="7" />
+        </svg>
+        <span>Dashboard</span>
+      </button>
+      <button class="dc-nav-item" data-view="employees" id="nav-employees">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        </svg>
+        <span>Empleados</span>
+      </button>
+      <button class="dc-nav-item" data-view="documents" id="nav-documents">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+        </svg>
+        <span>Documentos</span>
+      </button>
+      <button class="dc-nav-item" data-view="search" id="nav-search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        <span>Consulta y Filtros</span>
+      </button>
+    </nav>
+
+    <div class="dc-sidebar-footer">
+      <a href="/" class="dc-back-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+        <span>Volver al inicio</span>
+      </a>
+      <div class="dc-version-badge">v3.0 · Unificado</div>
+    </div>
+  </aside>
+
+  <!-- ===== MAIN ===== -->
+  <main class="dc-main" id="dcMain">
+
+    <header class="dc-topbar">
+      <div class="dc-topbar-left">
+        <a href="/" class="dc-home-btn" title="Volver al inicio">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
+          </svg>
+          <span>Inicio</span>
+        </a>
+        <h1 class="dc-page-title" id="dcPageTitle">Dashboard</h1>
+      </div>
+      <div class="dc-topbar-right">
+        <div class="dc-datetime" id="dcDatetime"></div>
+        <div class="dc-user-chip">
+          <div class="dc-user-avatar">A</div>
+          <span>Admin</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ======= VIEW: DASHBOARD ======= -->
+    <section class="dc-view active" id="view-dashboard">
+      <div class="dc-stats-grid">
+        <div class="dc-stat-card">
+          <div class="dc-stat-icon blue">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+            </svg>
+          </div>
+          <div class="dc-stat-info">
+            <span class="dc-stat-value" id="statEmployees">—</span>
+            <span class="dc-stat-label">Empleados</span>
+          </div>
+        </div>
+        <div class="dc-stat-card">
+          <div class="dc-stat-icon purple">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+            </svg>
+          </div>
+          <div class="dc-stat-info">
+            <span class="dc-stat-value" id="statDocuments">—</span>
+            <span class="dc-stat-label">Documentos</span>
+          </div>
+        </div>
+        <div class="dc-stat-card">
+          <div class="dc-stat-icon orange">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 6 2 18 2 18 9" />
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+              <rect x="6" y="14" width="12" height="8" />
+            </svg>
+          </div>
+          <div class="dc-stat-info">
+            <span class="dc-stat-value" id="statPrinted">—</span>
+            <span class="dc-stat-label">Impresiones</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="dc-dashboard-grid">
+        <div class="dc-card">
+          <div class="dc-card-header">
+            <h2>Actividad Reciente</h2>
+          </div>
+          <div class="dc-activity-list" id="dcActivityList">
+            <div class="dc-empty">Cargando actividad…</div>
+          </div>
+        </div>
+        <div class="dc-card">
+          <div class="dc-card-header">
+            <h2>Acciones Rápidas</h2>
+          </div>
+          <div class="dc-quick-actions">
+            <button class="dc-btn dc-btn-primary" id="qaBtnNewDoc">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              Nuevo Documento
+            </button>
+            <button class="dc-btn dc-btn-secondary" id="qaBtnEmployees">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+              </svg>
+              Ver Empleados
+            </button>
+            <button class="dc-btn dc-btn-secondary" id="qaBtnSearch">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              Consultar Filtros
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======= VIEW: EMPLEADOS ======= -->
+    <section class="dc-view" id="view-employees">
+      <div class="dc-view-toolbar">
+        <div class="dc-search-box">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input type="text" id="dcEmpSearch" placeholder="Buscar empleado…" />
+        </div>
+        <div class="dc-toolbar-info">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+          <span>Los empleados se gestionan en <a href="/personal" class="dc-link">Gestión de Personal</a></span>
+        </div>
+      </div>
+      <div class="dc-table-wrapper">
+        <table class="dc-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Departamento / Cargo</th>
+              <th>Email</th>
+              <th>Documentos</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="dcEmpTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ======= VIEW: DOCUMENTOS ======= -->
+    <section class="dc-view" id="view-documents">
+      <div class="dc-view-toolbar">
+        <div class="dc-search-box">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input type="text" id="dcDocSearch" placeholder="Buscar documento…" />
+        </div>
+        <button class="dc-btn dc-btn-primary" id="dcBtnNewDocument">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+          Registrar Documento
+        </button>
+      </div>
+      <div class="dc-table-wrapper">
+        <table class="dc-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Título</th>
+              <th>Empleado</th>
+              <th>Fecha</th>
+              <th>Tipo</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="dcDocTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ======= VIEW: CONSULTA Y FILTROS ======= -->
+    <section class="dc-view" id="view-search">
+      <div class="dc-filter-panel">
+        <div class="dc-filter-row">
+          <div class="dc-filter-group">
+            <label for="filterEmployee">Empleado</label>
+            <select id="filterEmployee">
+              <option value="">— Todos —</option>
+            </select>
+          </div>
+          <div class="dc-filter-group">
+            <label for="filterYear">Año</label>
+            <select id="filterYear">
+              <option value="">— Todos —</option>
+            </select>
+          </div>
+          <div class="dc-filter-group">
+            <label for="filterMonth">Mes</label>
+            <select id="filterMonth">
+              <option value="">— Todos los meses —</option>
+              <option value="1">Enero</option>
+              <option value="2">Febrero</option>
+              <option value="3">Marzo</option>
+              <option value="4">Abril</option>
+              <option value="5">Mayo</option>
+              <option value="6">Junio</option>
+              <option value="7">Julio</option>
+              <option value="8">Agosto</option>
+              <option value="9">Septiembre</option>
+              <option value="10">Octubre</option>
+              <option value="11">Noviembre</option>
+              <option value="12">Diciembre</option>
+            </select>
+          </div>
+          <div class="dc-filter-group">
+            <label for="filterType">Tipo</label>
+            <select id="filterType">
+              <option value="">— Todos —</option>
+            </select>
+          </div>
+          <button class="dc-btn dc-btn-outline" id="dcBtnClearFilters">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+            Limpiar
+          </button>
+        </div>
+      </div>
+
+      <div class="dc-results-header" id="dcResultsHeader" style="display:none">
+        <div class="dc-results-info">
+          <span id="dcResultsCount"></span>
+        </div>
+        <div class="dc-results-actions">
+          <button class="dc-btn dc-btn-primary" id="dcBtnPrintFiltered">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 6 2 18 2 18 9" />
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+              <rect x="6" y="14" width="12" height="8" />
+            </svg>
+            Imprimir selección
+          </button>
+        </div>
+      </div>
+
+      <div class="dc-table-wrapper">
+        <table class="dc-table">
+          <thead>
+            <tr>
+              <th><input type="checkbox" id="dcSelectAll" /></th>
+              <th>Documento</th>
+              <th>Empleado</th>
+              <th>Fecha</th>
+              <th>Tipo</th>
+              <th>Estado</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody id="dcSearchTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ====== MODALES ====== -->
+
+  <!-- Modal Documento -->
+  <div class="dc-modal-overlay" id="dcDocModal">
+    <div class="dc-modal">
+      <div class="dc-modal-header">
+        <h3 id="dcDocModalTitle">Registrar Documento</h3>
+        <button class="dc-modal-close" data-modal="dcDocModal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
+      <div class="dc-modal-body">
+        <form id="dcDocForm" enctype="multipart/form-data">
+          <input type="hidden" id="dcDocId" />
+          <div class="dc-form-group">
+            <label for="dcDocEmp">Empleado *</label>
+            <select id="dcDocEmp" required></select>
+          </div>
+          <div class="dc-form-row">
+            <div class="dc-form-group">
+              <label for="dcDocType">Tipo de Documento *</label>
+              <select id="dcDocType" required>
+                <option value="">— Seleccionar —</option>
+                <option>Contrato</option>
+                <option>Recibo</option>
+                <option>Credencial</option>
+                <option>Carta</option>
+                <option>Oficio</option>
+                <option>Constancia</option>
+                <option>Otro</option>
+              </select>
+            </div>
+            <div class="dc-form-group">
+              <label for="dcDocDate">Fecha de escaneo *</label>
+              <input type="date" id="dcDocDate" required />
+            </div>
+          </div>
+          <div class="dc-form-group">
+            <label for="dcDocFile">Archivo (PDF, imagen)</label>
+            <input type="file" id="dcDocFile" accept=".pdf,.png,.jpg,.jpeg,.webp" />
+            <div class="dc-file-hint" id="dcCurrentFile"></div>
+          </div>
+        </form>
+      </div>
+      <div class="dc-modal-footer">
+        <button class="dc-btn dc-btn-outline" data-modal="dcDocModal">Cancelar</button>
+        <button class="dc-btn dc-btn-primary" id="dcBtnSaveDoc">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Ver Documento -->
+  <div class="dc-modal-overlay" id="dcViewDocModal">
+    <div class="dc-modal dc-modal-wide">
+      <div class="dc-modal-header">
+        <h3 id="dcViewDocTitle">Ver Documento</h3>
+        <button class="dc-modal-close" data-modal="dcViewDocModal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
+      <div class="dc-modal-body">
+        <div id="dcViewerContent"></div>
+      </div>
+      <div class="dc-modal-footer">
+        <a id="dcBtnDownload" class="dc-btn dc-btn-outline" download>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          Descargar
+        </a>
+        <button class="dc-btn dc-btn-primary" data-modal="dcViewDocModal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Imprimir -->
+  <div class="dc-modal-overlay" id="dcPrintModal">
+    <div class="dc-modal dc-modal-wide">
+      <div class="dc-modal-header">
+        <h3>Vista previa de impresión</h3>
+        <button class="dc-modal-close" data-modal="dcPrintModal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
+      <div class="dc-modal-body" id="dcPrintPreviewBody"></div>
+      <div class="dc-modal-footer">
+        <button class="dc-btn dc-btn-outline" data-modal="dcPrintModal">Cancelar</button>
+        <button class="dc-btn dc-btn-primary" id="dcBtnDoPrint">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 6 2 18 2 18 9" />
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+            <rect x="6" y="14" width="12" height="8" />
+          </svg>
+          Enviar a impresora
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="dc-toast" id="dcToast" role="status" aria-live="polite"></div>
+
+  <!-- Área de impresión oculta -->
+  <div id="dcPrintArea" style="display:none" aria-hidden="true"></div>
+
+  <script src="/js/doccontrol.js"></script>
+</body>
+
+</html>

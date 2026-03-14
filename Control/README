@@ -1,0 +1,41 @@
+### Descripción General
+El programa es una aplicación web local empaquetada como un ejecutable (.exe). Su objetivo es centralizar la administración de diferentes módulos (Personal, Eventos y Documentación) en una sola interfaz, sin necesidad de instalaciones complejas de bases de datos o servidores externos.
+
+### Arquitectura del Software (MVC)
+Se implementó una arquitectura Modelo-Vista-Controlador (MVC) para separar las responsabilidades y facilitar el mantenimiento:
+
+- Backend (Node.js/Express) :
+  - Modelos ( backend/models/ ) : Encargados de la interacción directa con la base de datos SQLite. Realizan consultas SQL y devuelven los datos procesados.
+  - Controladores ( backend/controllers/ ) : Contienen la lógica de negocio. Reciben las peticiones del usuario, llaman a los modelos y devuelven las respuestas.
+  - Rutas ( backend/routes/ ) : Definen los puntos de entrada (endpoints) de la API (ej. /api/personal , /api/documents ).
+- Vista (Frontend) :
+  - Ubicada en la carpeta frontend/ , utiliza HTML5, CSS3 y JavaScript vanilla. Se comunica con el backend mediante un cliente API centralizado en api.js .
+- Configuración ( backend/config/ ) : Maneja la conexión a la base de datos y la resolución de rutas dinámicas para el modo ejecutable.
+### Funcionalidades Principales
+1. Gestión de Personal :
+   - Registro, edición y baja de empleados.
+   - Visualización de datos de contacto y cargos.
+2. Control de Actividades (Callejoneadas) :
+   - Registro de eventos y actividades específicas.
+   - Seguimiento de estados y fechas.
+3. DocControl (Gestión Documental) :
+   - Carga de archivos (PDF) asociados a registros.
+   - Almacenamiento organizado en la carpeta uploads .
+   - Estadísticas rápidas sobre el estado de los documentos.
+### Portabilidad y Distribución
+El programa utiliza la herramienta pkg para compilar todo el entorno (Node.js, librerías, frontend y assets) en un único archivo ejecutable:
+
+- Ubicación del ejecutable : dist/sistema.exe .
+- Base de Datos : Utiliza SQLite , lo que significa que la base de datos es un simple archivo ( data/app.db ) que se mueve con el programa.
+- Modo Portátil : Cuando se ejecuta como .exe , el programa detecta automáticamente su entorno y guarda la base de datos y los archivos subidos en la carpeta AppData del usuario o junto al ejecutable, evitando problemas de permisos en Windows.
+### Tecnologías Utilizadas
+- Servidor : Node.js con Express.
+- Base de Datos : SQLite3 (Promisificado para mejor rendimiento).
+- Frontend : HTML/JS/CSS (Sin frameworks pesados para máxima velocidad).
+- Empaquetado : pkg para generación de binarios.
+¿Cómo ejecutar el desarrollo? Si deseas realizar cambios y probarlos:
+
+1. Instala las dependencias: npm install
+2. Inicia el servidor de desarrollo: npm run dev (usa nodemon).
+3. Para generar el ejecutable final: npm run build
+Esta estructura garantiza que el sistema sea escalable, permitiendo añadir nuevos módulos en el futuro simplemente siguiendo el patrón MVC ya establecido.

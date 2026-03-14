@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Sistema Administrativo Unificado — Personal, Callejoneadas y Gestión de Documentos.">
+    <title>Sistema Administrativo Unificado</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* Estilos específicos del hub */
+        .hub-badge {
+            display: inline-block;
+            background: rgba(79, 110, 247, .15);
+            color: #818cf8;
+            font-size: 0.7em;
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-left: 6px;
+            font-weight: 500;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏢 Sistema Administrativo</h1>
+            <p>Selecciona el módulo que deseas gestionar</p>
+        </div>
+
+        <div class="modules-grid">
+            <a href="/personal" class="module-card" id="card-personal">
+                <div class="module-icon">👥</div>
+                <h3>Gestión de Personal</h3>
+                <p>Administra empleados, salarios e información laboral del equipo</p>
+            </a>
+
+            <a href="/callejoneadas" class="module-card" id="card-callejoneadas">
+                <div class="module-icon">🍻</div>
+                <h3>Registro de Callejoneadas</h3>
+                <p>Registra y gestiona salidas, eventos sociales y participantes</p>
+            </a>
+
+            <a href="/doccontrol" class="module-card" id="card-doccontrol">
+                <div class="module-icon">📄</div>
+                <h3>DocControl <span class="hub-badge">Integrado</span></h3>
+                <p>Gestión de documentos escaneados por empleado, con filtrado y control de impresión</p>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Verificar conexión con el backend
+        async function checkBackend() {
+            try {
+                const response = await fetch('/api/test');
+                const data = await response.json();
+                console.log('✅ Backend conectado:', data.mensaje);
+            } catch (error) {
+                console.error('❌ Error conectando al backend:', error);
+            }
+        }
+        checkBackend();
+    </script>
+</body>
+
+</html>

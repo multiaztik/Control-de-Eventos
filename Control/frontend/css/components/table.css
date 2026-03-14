@@ -1,0 +1,414 @@
+/* Table Styles */
+.excel-table {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.table-header {
+  background: #34495e;
+  color: white;
+  padding: 18px 20px;
+  display: grid;
+  gap: 1px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.personal-header {
+  grid-template-columns: 60px 1fr 1fr 1fr 1fr 1.5fr 1fr 1fr 1fr 120px;
+}
+
+/* ✅ Grid para callejoneadas con más espacio para fechas */
+.callejoneadas-header {
+  grid-template-columns: 60px 1fr 1.5fr 1fr 1fr 2fr 1fr 120px;
+}
+
+.table-body {
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.table-row {
+  display: grid;
+  gap: 1px;
+  border-bottom: 1px solid #ecf0f1;
+  padding: 15px 20px;
+  align-items: center;
+  transition: background-color 0.2s ease;
+}
+
+.personal-row {
+  grid-template-columns: 60px 1fr 1fr 1fr 1fr 1.5fr 1fr 1fr 1fr 120px;
+}
+
+/* ✅ Grid para filas de callejoneadas */
+.callejoneadas-row {
+  grid-template-columns: 60px 1fr 1.5fr 1fr 1fr 2fr 1fr 120px;
+}
+
+.table-row:hover {
+  background: #f8f9fa;
+}
+
+.table-row:last-child {
+  border-bottom: none;
+}
+
+.table-cell {
+  padding: 10px 8px;
+  font-size: 14px;
+  word-wrap: break-word;
+}
+
+/* Status Badges */
+.estatus-pagada {
+  background: #d4edda;
+  color: #155724;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  text-align: center;
+  font-size: 12px;
+  border: 1px solid #c3e6cb;
+}
+
+.estatus-deuda {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  text-align: center;
+  font-size: 12px;
+  border: 1px solid #f5c6cb;
+}
+
+/* Action Buttons */
+.actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.action-btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s ease;
+  min-width: 40px;
+}
+
+.btn-edit {
+  background: #3498db;
+  color: white;
+}
+
+.btn-delete {
+  background: #e74c3c;
+  color: white;
+}
+
+.action-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* ✅ Responsive Tables - SIN @media anidado */
+@media (max-width: 1200px) {
+
+  .personal-header,
+  .personal-row {
+    grid-template-columns: 50px 1fr 1fr 1fr 1fr 1.5fr;
+  }
+
+  .personal-header div:nth-child(n+7),
+  .personal-row div:nth-child(n+7) {
+    display: none;
+  }
+
+  .callejoneadas-header,
+  .callejoneadas-row {
+    grid-template-columns: 50px 1fr 1.5fr 1fr 1fr;
+  }
+
+  .callejoneadas-header div:nth-child(n+6),
+  .callejoneadas-row div:nth-child(n+6) {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .table-header,
+  .table-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .table-header div,
+  .table-row div {
+    display: block !important;
+    text-align: left;
+  }
+
+  .table-header div::before,
+  .table-row div::before {
+    content: attr(data-label);
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+    color: #7f8c8d;
+    font-size: 12px;
+  }
+
+  .actions {
+    justify-content: flex-start;
+  }
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #7f8c8d;
+}
+
+.empty-state .icon {
+  font-size: 4em;
+  margin-bottom: 20px;
+  opacity: 0.5;
+}
+
+.empty-state h3 {
+  margin-bottom: 10px;
+  color: #34495e;
+}
+
+.empty-state p {
+  margin-bottom: 20px;
+}
+
+/* ===== HISTÓRICO ===== */
+.hist-toolbar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin: 6px 0 12px;
+}
+
+.hist-toolbar .filters {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.hist-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.hist-summary .card {
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.hist-summary .kpi {
+  font-size: 22px;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+/* ======= FIX scroll/alineación para histórico ======= */
+/* El contenedor del histórico maneja el scroll para que el header sticky quede alineado */
+.excel-table.hist-table {
+  overflow-x: auto;
+  overflow-y: auto;
+  /* vertical también, si hay muchas filas */
+  max-height: 60vh;
+  /* ajusta según tu modal */
+  border-radius: 10px;
+}
+
+/* Misma rejilla para header y filas + ancho mínimo común */
+.excel-table.hist-table .table-header,
+.excel-table.hist-table .table-row {
+  display: grid;
+  grid-template-columns:
+    70px
+    /* ID */
+    220px
+    /* Nombre */
+    170px
+    /* Cargo */
+    170px
+    /* Compañía */
+    80px
+    /* Total */
+    90px
+    /* Pagadas */
+    90px
+    /* En deuda */
+    120px
+    /* Última fecha */
+    110px;
+  /* Rango */
+  column-gap: 10px;
+  min-width: 1200px;
+  /* suma de columnas + gaps => evita saltos */
+  box-sizing: border-box;
+}
+
+/* Header sticky dentro del MISMO contenedor que scrollea */
+.excel-table.hist-table .table-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #2f455b;
+  /* tono más oscuro para header */
+  color: #fff;
+}
+
+/* Anular el scroll del body SOLO dentro del histórico para evitar doble scroll */
+.excel-table.hist-table .table-body {
+  max-height: unset;
+  overflow: visible;
+}
+
+.hist-table .table-row {
+  align-items: center;
+}
+
+.hist-table .table-body .table-row:nth-child(odd) {
+  background: #fbfdff;
+}
+
+.hist-table .table-body .table-row:nth-child(even) {
+  background: #f5f7fb;
+}
+
+/* ======= STICKY columnas ID + Nombre al hacer scroll horizontal ======= */
+.hist-table .col-id,
+.hist-table .table-header .col-id {
+  position: sticky;
+  left: 0;
+  z-index: 3;
+}
+.hist-table .col-nombre,
+.hist-table .table-header .col-nombre {
+  position: sticky;
+  left: 80px; /* 70px col-id + 10px gap */
+  z-index: 3;
+}
+
+/* Fondo del header sticky */
+.hist-table .table-header .col-id,
+.hist-table .table-header .col-nombre {
+  background: #2f455b;
+  z-index: 4;
+}
+
+/* Fondo de filas impares sticky */
+.hist-table .table-body .table-row:nth-child(odd) .col-id,
+.hist-table .table-body .table-row:nth-child(odd) .col-nombre {
+  background: #fbfdff;
+}
+
+/* Fondo de filas pares sticky */
+.hist-table .table-body .table-row:nth-child(even) .col-id,
+.hist-table .table-body .table-row:nth-child(even) .col-nombre {
+  background: #f5f7fb;
+}
+
+/* Hover override para sticky cells */
+.hist-table .table-body .table-row:hover .col-id,
+.hist-table .table-body .table-row:hover .col-nombre {
+  background: #eef2ff;
+}
+
+/* Sombra sutil al scroll horizontal para indicar que hay sticky */
+.hist-table .col-nombre::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -6px;
+  bottom: 0;
+  width: 6px;
+  background: linear-gradient(90deg, rgba(0,0,0,0.06), transparent);
+  pointer-events: none;
+}
+.hist-table .col-nombre {
+  position: sticky;
+  left: 80px;
+  z-index: 3;
+}
+
+.col-num {
+  text-align: right;
+}
+
+.col-fecha {
+  white-space: nowrap;
+}
+
+.col-rango {
+  text-align: center;
+}
+
+.chip {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #3730a3;
+  font-size: 12px;
+  border: 1px solid #e0e7ff;
+}
+
+/* Badges rango */
+.badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+
+.badge-gray {
+  background: #eee;
+  color: #555;
+}
+
+.badge-blue {
+  background: #e6f0ff;
+  color: #1a56db;
+}
+
+.badge-green {
+  background: #e9f7ef;
+  color: #1e7e34;
+}
+
+.badge-orange {
+  background: #fff4e6;
+  color: #d9480f;
+}
+
+.badge-purple {
+  background: #f3e8ff;
+  color: #6b21a8;
+}
+
+/* Mejoras pequeñas */
+.table-body .table-cell b {
+  font-weight: 700;
+}

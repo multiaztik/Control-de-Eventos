@@ -1,0 +1,42 @@
+{
+  "name": "sistema-administrativo-unificado",
+  "version": "1.0.0",
+  "description": "Sistema de Gestión Administrativa con Backend MVC",
+  "main": "server.js",
+  "bin": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "build": "pkg . --targets node18-win-x64 --output dist/sistema.exe"
+  },
+  "pkg": {
+    "scripts": [
+      "backend/config/**/*.js",
+      "backend/models/**/*.js",
+      "backend/controllers/**/*.js",
+      "backend/routes/**/*.js",
+      "backend/middleware/**/*.js"
+    ],
+    "assets": [
+      "frontend/**/*",
+      "node_modules/sqlite3/build/Release/node_sqlite3.node",
+      "node_modules/sqlite3/lib/**/*.js",
+      "node_modules/exceljs/**/*",
+      "node_modules/iconv-lite/**/*",
+      "node_modules/multer/**/*"
+    ],
+    "outputPath": "dist"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "exceljs": "^4.4.0",
+    "express": "^4.19.2",
+    "iconv-lite": "^0.6.3",
+    "multer": "^1.4.5-lts.1",
+    "sqlite3": "^6.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "pkg": "^5.8.1"
+  }
+}
