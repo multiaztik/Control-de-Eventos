@@ -1,183 +1,226 @@
-/* Modal Styles */
+/* ================================================================
+   Modal — Tema Dark (alineado con DocControl)
+   Compatible con modal.js: usa .modal como wrapper y .modal-content
+   ================================================================ */
+
+/* ── Overlay ────────────────────────────────────────────────── */
 .modal {
   display: none;
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
+  inset: 0;
+  background: rgba(0, 0, 0, .65);
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(4px);
 }
 
+/* modal.js lo muestra con display:flex */
+.modal[style*="flex"] {
+  display: flex !important;
+}
+
+/* ── Modal box ──────────────────────────────────────────────── */
 .modal-content {
-  background: white;
-  padding: 40px;
-  border-radius: 20px;
-  width: 90%;
-  max-width: 500px;
+  background: #1e2537;
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 16px;
+  width: 92%;
+  max-width: 520px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  animation: modalSlideIn 0.3s ease-out;
+  animation: modalSlideIn .22s ease;
+  padding: 0;
+}
+
+.modal-content.modal-wide {
+  max-width: 800px;
+}
+
+.modal-content.modal-xl {
+  max-width: 1000px;
 }
 
 @keyframes modalSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-50px) scale(0.9);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  from { opacity: 0; transform: translateY(-18px) scale(.97); }
+  to   { opacity: 1; transform: translateY(0)     scale(1);   }
 }
 
-.modal-content h3 {
-  color: #2c3e50;
-  margin-bottom: 20px;
-  font-size: 1.5em;
-  text-align: center;
+/* ── Modal header (h3 directo dentro de modal-content) ──────── */
+.modal-content > h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  padding: 20px 24px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, .06);
+  margin: 0;
 }
 
-/* Form Styles */
+/* ── Required note ──────────────────────────────────────────── */
+.required-note {
+  font-size: .75rem;
+  color: #64748b;
+  padding: 8px 24px 0;
+  margin: 0;
+}
+
+/* ── Form inside modal ──────────────────────────────────────── */
+.modal-content form {
+  padding: 20px 24px 24px;
+}
+
+/* ── Form group ─────────────────────────────────────────────── */
 .form-group {
-  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 16px;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
 }
 
 .form-group label {
-  display: block;
-  margin-bottom: 8px;
+  font-size: .75rem;
   font-weight: 600;
-  color: #2c3e50;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: .04em;
 }
 
-.form-group label::after {
+/* Asterisco para campos requeridos */
+.form-group:not(.optional) > label::after {
   content: " *";
-  color: #e74c3c;
+  color: #f87171;
 }
 
-.form-group.optional label::after {
-  content: "";
-}
-
+/* ── Inputs, selects, textareas ─────────────────────────────── */
 .form-group input,
 .form-group select,
 .form-group textarea {
-  width: 100%;
-  padding: 12px 16px;
-  border: 2px solid #e9ecef;
+  background: #0f1117;
+  border: 1px solid rgba(255, 255, 255, .1);
   border-radius: 8px;
-  font-size: 14px;
-  transition: all 0.3s ease;
-  background: #f8f9fa;
+  padding: 10px 12px;
+  color: #e2e8f0;
+  font-size: .875rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+  width: 100%;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #475569;
 }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
-  outline: none;
-  border-color: #3498db;
-  background: white;
-  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+  border-color: #4f6ef7;
+  box-shadow: 0 0 0 3px rgba(79, 110, 247, .15);
 }
 
 .form-group input.error,
 .form-group select.error,
 .form-group textarea.error {
-  border-color: #e74c3c;
-  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+  border-color: #f87171;
+  box-shadow: 0 0 0 3px rgba(248, 113, 113, .12);
+}
+
+.form-group select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+}
+
+.form-group select option {
+  background: #1e2537;
+  color: #e2e8f0;
 }
 
 .form-group textarea {
   resize: vertical;
   min-height: 80px;
-  font-family: inherit;
 }
 
-/* Error Messages */
+/* ── Two-column row ─────────────────────────────────────────── */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* ── Error messages ─────────────────────────────────────────── */
 .error-message {
-  color: #e74c3c;
-  font-size: 12px;
-  margin-top: 6px;
+  font-size: .75rem;
+  color: #f87171;
+  margin-top: 2px;
   display: none;
 }
 
-.error-message.show {
-  display: block;
+/* ── Help text ──────────────────────────────────────────────── */
+.help-text {
+  font-size: .75rem;
+  color: #475569;
+  margin-top: 2px;
+  font-style: italic;
 }
 
-/* Required Note */
-.required-note {
-  color: #e74c3c;
-  font-size: 12px;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-/* Form Actions */
+/* ── Form actions ───────────────────────────────────────────── */
 .form-actions {
   display: flex;
-  gap: 12px;
-  margin-top: 30px;
+  gap: 10px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, .06);
 }
 
 .form-actions .btn {
   flex: 1;
-  padding: 14px;
-  font-size: 14px;
+  justify-content: center;
+  padding: 10px 16px;
 }
 
-/* Responsive Modal */
+/* ── Scrollbar dentro del modal ─────────────────────────────── */
+.modal-content::-webkit-scrollbar        { width: 6px; }
+.modal-content::-webkit-scrollbar-track  { background: transparent; }
+.modal-content::-webkit-scrollbar-thumb  { background: rgba(255,255,255,.1); border-radius: 3px; }
+.modal-content::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.2); }
+
+/* ── Histórico modal (extra ancho) ──────────────────────────── */
+#modalHistorico .modal-content,
+.modal-content[style*="1000px"] {
+  max-width: 1000px;
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .modal-content {
-    padding: 30px 20px;
-    margin: 20px;
-    width: auto;
+    width: 96%;
+    max-width: 100%;
+    border-radius: 12px;
+  }
+
+  .modal-content > h3 {
+    padding: 16px 18px 12px;
+    font-size: .95rem;
+  }
+
+  .modal-content form {
+    padding: 16px 18px 20px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
   }
 
   .form-actions {
     flex-direction: column;
   }
-}
-
-.help-text {
-  font-size: 12px;
-  color: #666;
-  margin-top: 5px;
-  font-style: italic;
-}
-
-select[multiple] {
-  min-height: 100px;
-}
-
-select[multiple] option {
-  padding: 8px 12px;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-select[multiple] option:last-child {
-  border-bottom: none;
-}
-
-select[multiple] option:hover {
-  background-color: #f8f9fa;
-}
-
-/* Fallback por si alguna clase no se aplica */
-.modal.open {
-  display: block !important;
-}
-
-.modal .modal-content {
-  z-index: 1001;
-}
-
-.modal .modal-overlay {
-  z-index: 1000;
 }

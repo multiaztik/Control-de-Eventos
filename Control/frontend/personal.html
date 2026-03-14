@@ -1,296 +1,373 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gestión de Personal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/components/modal.css">
   <link rel="stylesheet" href="/css/components/table.css">
 </head>
 
-<body>
-  <div class="container">
-    <div class="header">
-      <h1>👥 Gestión de Personal</h1>
-      <p>Administra empleados, salarios y información laboral</p>
-      <a href="/" class="btn btn-secondary">🏠 Volver al Inicio</a>
+<body style="display:flex; min-height:100vh;">
+
+  <!-- ═══════════════ SIDEBAR ═══════════════ -->
+  <aside class="dc-sidebar" id="sidebar">
+    <div class="dc-sidebar-header">
+      <a href="/" class="dc-logo">
+        <div class="dc-logo-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </div>
+        <span class="dc-logo-text">SistemaAdmin</span>
+      </a>
+      <button class="dc-sidebar-toggle" onclick="toggleSidebar()" title="Colapsar menú">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="6"  x2="21" y2="6"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
     </div>
 
-    <div class="toolbar">
-      <button class="btn btn-primary" onclick="PersonalUI.agregar()">
-        👥 Agregar Empleado
-      </button>
-      <button class="btn btn-success" onclick="PersonalUI.cargar()">
-        🔄 Actualizar
-      </button>
+    <nav class="dc-sidebar-nav">
+      <a href="/personal" class="dc-nav-item active">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        <span>Personal</span>
+      </a>
+      <a href="/callejoneadas" class="dc-nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 11l-5-9-5 9"/>
+          <path d="M3 20c3-4 6-6 9-6s6 2 9 6"/>
+        </svg>
+        <span>Callejoneadas</span>
+      </a>
+      <a href="/doccontrol" class="dc-nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+        </svg>
+        <span>DocControl</span>
+      </a>
+    </nav>
 
-      <!-- NUEVO: botón para ver histórico -->
-      <button class="btn btn-primary" onclick="PersonalUI.verHistorico()">
-        📈 Ver histórico
-      </button>
-
-      <div style="border-left: 2px solid #ddd; height: 30px; margin: 0 6px;"></div>
-
-      <!-- NUEVO: Carga Masiva -->
-      <button class="btn btn-warning" onclick="PersonalUI.descargarPlantilla()"
-        title="Descarga una plantilla Excel con las columnas necesarias">
-        📥 Descargar Plantilla
-      </button>
-      <button class="btn btn-success" onclick="document.getElementById('inputCargaMasiva').click()"
-        title="Sube un archivo Excel para registrar múltiples empleados">
-        📤 Carga Masiva
-      </button>
-      <input type="file" id="inputCargaMasiva" accept=".xlsx,.xls" style="display:none"
-        onchange="PersonalUI.cargaMasiva(event)">
-
-      <div style="flex-grow: 1;"></div>
-      <input type="text" id="buscar-personal" placeholder="🔍 Buscar empleados..." onkeyup="PersonalUI.filtrar()"
-        class="search-input">
+    <div class="dc-sidebar-footer">
+      <a href="/" class="dc-back-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+        <span>Volver al inicio</span>
+      </a>
+      <div class="dc-version-badge">v3.0 · Unificado</div>
     </div>
+  </aside>
 
-    <div id="status-personal"></div>
+  <!-- ═══════════════ MAIN ═══════════════ -->
+  <main class="dc-main" id="main">
 
-    <div class="excel-table">
-      <div class="table-header personal-header">
-        <div>ID</div>
-        <div>Nombre</div>
-        <div>Apellido</div>
-        <div>Cargo</div>
-        <div>Compañía</div>
-        <div>Email</div>
-        <div>Teléfono</div>
-        <div>Salario</div>
-        <div>Fecha Cont.</div>
-        <div>Acciones</div>
+    <!-- Topbar -->
+    <header class="dc-topbar">
+      <div class="dc-topbar-left">
+        <h1 class="dc-page-title">👥 Gestión de Personal</h1>
       </div>
-      <div class="table-body" id="tablaPersonal">
-        <!-- Los datos se cargarán dinámicamente -->
+      <div class="dc-topbar-right">
+        <div class="dc-datetime" id="datetime"></div>
+        <div class="dc-user-chip">
+          <div class="dc-user-avatar">SA</div>
+          <span>Admin</span>
+        </div>
       </div>
-    </div>
-  </div>
+    </header>
 
-  <!-- Modal para Personal -->
+    <!-- Content -->
+    <div class="page-content">
+
+      <!-- KPI Cards -->
+      <div class="stats-grid" id="statsGrid">
+        <div class="stat-card">
+          <div class="stat-icon blue">👥</div>
+          <div class="stat-info">
+            <span class="stat-value" id="statTotal">—</span>
+            <span class="stat-label">Total empleados</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">✅</div>
+          <div class="stat-info">
+            <span class="stat-value" id="statActivos">—</span>
+            <span class="stat-label">Activos</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon purple">🏢</div>
+          <div class="stat-info">
+            <span class="stat-value" id="statCompanias">—</span>
+            <span class="stat-label">Compañías</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange">💰</div>
+          <div class="stat-info">
+            <span class="stat-value" id="statSalarioPromedio">—</span>
+            <span class="stat-label">Salario promedio</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Status -->
+      <div id="status-personal" class="status"></div>
+
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <button class="btn btn-primary" onclick="PersonalUI.agregar()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Agregar Empleado
+        </button>
+        <button class="btn btn-secondary" onclick="PersonalUI.cargar()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          Actualizar
+        </button>
+        <button class="btn btn-success" onclick="PersonalUI.verHistorico()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Ver Histórico
+        </button>
+
+        <div class="toolbar-sep"></div>
+
+        <button class="btn btn-warning" onclick="PersonalUI.descargarPlantilla()" title="Descarga plantilla Excel">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Plantilla
+        </button>
+        <button class="btn btn-success" onclick="document.getElementById('inputCargaMasiva').click()" title="Carga masiva desde Excel">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Carga Masiva
+        </button>
+        <input type="file" id="inputCargaMasiva" accept=".xlsx,.xls" style="display:none"
+               onchange="PersonalUI.cargaMasiva(event)">
+
+        <div class="toolbar-spacer"></div>
+
+        <input type="text" id="buscar-personal" placeholder="🔍 Buscar empleados…"
+               onkeyup="PersonalUI.filtrar()" class="search-input">
+      </div>
+
+      <!-- Table -->
+      <div class="excel-table">
+        <div class="table-header personal-header">
+          <div>ID</div>
+          <div>Nombre</div>
+          <div>Apellido</div>
+          <div>Cargo</div>
+          <div>Compañía</div>
+          <div>Email</div>
+          <div>Teléfono</div>
+          <div>Salario</div>
+          <div>Fecha Cont.</div>
+          <div>Acciones</div>
+        </div>
+        <div class="table-body" id="tablaPersonal">
+          <div class="empty-state">
+            <span class="icon">👥</span>
+            <h3>Cargando personal…</h3>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /page-content -->
+  </main>
+
+  <!-- ═══════════════ MODAL: AGREGAR / EDITAR EMPLEADO ═══════════════ -->
   <div class="modal" id="modalPersonal">
     <div class="modal-content">
       <h3 id="modalTituloPersonal">👥 Agregar Nuevo Empleado</h3>
-      <div class="required-note">* Campos obligatorios</div>
+      <span class="required-note">* Campos obligatorios</span>
       <form id="formPersonal" onsubmit="PersonalUI.guardar(event)">
-        <div class="form-group">
-          <label>Nombre:</label>
-          <input type="text" id="nombre" placeholder="Ej: Juan" required>
-          <div class="error-message" id="error-nombre">Este campo es requerido</div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nombre</label>
+            <input type="text" id="nombre" placeholder="Ej: Juan" required>
+            <div class="error-message" id="error-nombre"></div>
+          </div>
+          <div class="form-group">
+            <label>Apellido</label>
+            <input type="text" id="apellido" placeholder="Ej: Pérez" required>
+            <div class="error-message" id="error-apellido"></div>
+          </div>
         </div>
-        <div class="form-group">
-          <label>Apellido:</label>
-          <input type="text" id="apellido" placeholder="Ej: Pérez" required>
-          <div class="error-message" id="error-apellido">Este campo es requerido</div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Cargo</label>
+            <input type="text" id="cargo" placeholder="Ej: Desarrollador" required>
+            <div class="error-message" id="error-cargo"></div>
+          </div>
+          <div class="form-group">
+            <label>Compañía</label>
+            <select id="compania" required>
+              <option value="">Seleccionar…</option>
+              <option value="Compañía 1">Compañía 1</option>
+              <option value="Compañía 2">Compañía 2</option>
+              <option value="Compañía 3">Compañía 3</option>
+              <option value="Administrativo">Administrativo</option>
+            </select>
+            <div class="error-message" id="error-compania"></div>
+          </div>
         </div>
+
         <div class="form-group">
-          <label>Cargo:</label>
-          <input type="text" id="cargo" placeholder="Ej: Desarrollador" required>
-          <div class="error-message" id="error-cargo">Este campo es requerido</div>
-        </div>
-        <div class="form-group">
-          <label>Compañía:</label>
-          <select id="compania" required>
-            <option value="">Seleccionar...</option>
-            <option value="Compañía 1">Compañía 1</option>
-            <option value="Compañía 2">Compañía 2</option>
-            <option value="Compañía 3">Compañía 3</option>
-            <option value="Administrativo">Administrativo</option>
-          </select>
-          <div class="error-message" id="error-compania">Este campo es requerido</div>
-        </div>
-        <div class="form-group">
-          <label>Email:</label>
+          <label>Email</label>
           <input type="email" id="email" placeholder="Ej: juan@empresa.com" required>
-          <div class="error-message" id="error-email">Formato de email inválido</div>
+          <div class="error-message" id="error-email"></div>
         </div>
-        <div class="form-group optional">
-          <label>Teléfono:</label>
-          <input type="tel" id="telefono" placeholder="Ej: 555-123-4567">
-          <div class="error-message" id="error-telefono">El teléfono debe tener al menos 10 dígitos</div>
+
+        <div class="form-row">
+          <div class="form-group optional">
+            <label>Teléfono</label>
+            <input type="tel" id="telefono" placeholder="Ej: 4921234567">
+            <div class="error-message" id="error-telefono"></div>
+          </div>
+          <div class="form-group">
+            <label>Salario</label>
+            <input type="number" id="salario" step="0.01" min="0" placeholder="0.00" required>
+            <div class="error-message" id="error-salario"></div>
+          </div>
         </div>
+
         <div class="form-group">
-          <label>Salario:</label>
-          <input type="number" id="salario" step="0.01" min="0" placeholder="0.00" required>
-          <div class="error-message" id="error-salario">El salario debe ser un número positivo</div>
-        </div>
-        <div class="form-group">
-          <label>Fecha de Contratación:</label>
+          <label>Fecha de Contratación</label>
           <input type="date" id="fecha_contratacion" required>
-          <div class="error-message" id="error-fecha_contratacion">Este campo es requerido</div>
+          <div class="error-message" id="error-fecha_contratacion"></div>
         </div>
+
         <div class="form-actions">
-          <button type="submit" class="btn btn-success">Guardar Empleado</button>
-          <button type="button" class="btn btn-danger" onclick="Modal.close('modalPersonal')">
-            Cancelar
-          </button>
+          <button type="submit" class="btn btn-primary">Guardar Empleado</button>
+          <button type="button" class="btn btn-secondary" onclick="Modal.close('modalPersonal')">Cancelar</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- NUEVO: Modal Histórico -->
+  <!-- ═══════════════ MODAL: HISTÓRICO ═══════════════ -->
   <div class="modal" id="modalHistorico">
-    <div class="modal-content" style="max-width: 1000px;">
+    <div class="modal-content modal-xl">
       <h3>📈 Histórico de Callejoneadas por Persona</h3>
-
-      <!-- Filtros -->
-      <div class="hist-toolbar">
-        <div class="filters">
-          <label>Desde</label>
-          <input type="date" id="hist_desde">
-          <label>Hasta</label>
-          <input type="date" id="hist_hasta">
-          <button class="btn btn-secondary" onclick="PersonalUI.cargarHistorico()">Aplicar</button>
+      <form style="padding: 20px 24px 0;" onsubmit="return false;">
+        <div class="hist-toolbar">
+          <div class="filters">
+            <label>Desde</label>
+            <input type="date" id="hist_desde">
+            <label>Hasta</label>
+            <input type="date" id="hist_hasta">
+            <button class="btn btn-primary btn-sm" onclick="PersonalUI.cargarHistorico()">Aplicar</button>
+          </div>
+          <div class="actions">
+            <button class="btn btn-secondary btn-sm" onclick="Modal.close('modalHistorico')">✕ Cerrar</button>
+          </div>
         </div>
-        <div class="actions">
-          <button class="btn btn-danger" onclick="Modal.close('modalHistorico')">Cerrar</button>
+      </form>
+
+      <div style="padding: 0 24px;">
+        <!-- Resumen KPI -->
+        <div class="hist-summary" id="hist_summary"></div>
+
+        <!-- Tabla histórico -->
+        <div class="excel-table hist-table" style="overflow-x:auto; max-height:50vh;">
+          <div class="table-header hist-table-header" style="display:grid; grid-template-columns: 44px 1.6fr 1.1fr 1.1fr 60px 70px 80px 1fr 80px; min-width:820px; padding:0 4px;">
+            <div class="col-id">ID</div>
+            <div>Nombre</div>
+            <div>Cargo</div>
+            <div>Compañía</div>
+            <div class="col-num">Total</div>
+            <div class="col-num">Pagadas</div>
+            <div class="col-num">En deuda</div>
+            <div>Última fecha</div>
+            <div class="col-rango">Rango</div>
+          </div>
+          <div class="table-body" id="tablaHistorico"></div>
         </div>
       </div>
-
-      <!-- Resumen -->
-      <div class="hist-summary" id="hist_summary">
-        <!-- Se llena dinámicamente -->
-      </div>
-
-      <!-- Tabla -->
-      <div class="excel-table hist-table">
-        <div class="table-header">
-          <div class="col-id">ID</div>
-          <div class="col-nombre">Nombre</div>
-          <div class="col-cargo">Cargo</div>
-          <div class="col-compania">Compañía</div>
-          <div class="col-num">Total</div>
-          <div class="col-num">Pagadas</div>
-          <div class="col-num">En deuda</div>
-          <div class="col-fecha">Última fecha</div>
-          <div class="col-rango">Rango</div>
-        </div>
-        <div class="table-body" id="tablaHistorico">
-          <!-- Se llena dinámicamente -->
-        </div>
+      <div style="padding: 16px 24px 20px; display:flex; justify-content:flex-end; border-top:1px solid rgba(255,255,255,.06); margin-top:16px;">
+        <button class="btn btn-secondary" onclick="Modal.close('modalHistorico')">Cerrar</button>
       </div>
     </div>
   </div>
 
-  <!-- NUEVO: Modal Resultados Carga Masiva -->
+  <!-- ═══════════════ MODAL: CARGA MASIVA ═══════════════ -->
   <div class="modal" id="modalCargaMasiva">
-    <div class="modal-content" style="max-width: 650px;">
+    <div class="modal-content" style="max-width:640px;">
       <h3 id="cargaMasivaTitulo">📤 Carga Masiva</h3>
-      <div id="cargaMasivaBody">
-        <!-- Se llena dinámicamente -->
-      </div>
-      <div class="form-actions" style="margin-top: 16px;">
-        <button type="button" class="btn btn-danger" onclick="Modal.close('modalCargaMasiva')">
-          Cerrar
-        </button>
+      <div style="padding: 20px 24px 24px;">
+        <div id="cargaMasivaBody"></div>
+        <div style="display:flex; justify-content:flex-end; margin-top:20px; padding-top:16px; border-top:1px solid rgba(255,255,255,.06);">
+          <button class="btn btn-secondary" onclick="Modal.close('modalCargaMasiva')">Cerrar</button>
+        </div>
       </div>
     </div>
   </div>
 
-  <style>
-    .carga-progress {
-      text-align: center;
-      padding: 40px 20px;
-    }
-
-    .carga-progress .spinner {
-      width: 48px;
-      height: 48px;
-      border: 4px solid #e9ecef;
-      border-top: 4px solid #3498db;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin: 0 auto 16px;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    .carga-resumen {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-
-    .carga-card {
-      background: #f8f9fa;
-      border-radius: 12px;
-      padding: 16px;
-      text-align: center;
-      border: 1px solid #e9ecef;
-    }
-
-    .carga-card .num {
-      font-size: 28px;
-      font-weight: 800;
-      display: block;
-      margin-bottom: 4px;
-    }
-
-    .carga-card .label {
-      font-size: 12px;
-      color: #7f8c8d;
-      font-weight: 600;
-    }
-
-    .carga-card.ok .num {
-      color: #27ae60;
-    }
-
-    .carga-card.error .num {
-      color: #e74c3c;
-    }
-
-    .carga-card.total .num {
-      color: #2c3e50;
-    }
-
-    .carga-errores {
-      max-height: 250px;
-      overflow-y: auto;
-      border: 1px solid #e9ecef;
-      border-radius: 8px;
-      padding: 12px;
-      background: #fff5f5;
-    }
-
-    .carga-errores h4 {
-      color: #e74c3c;
-      margin-bottom: 8px;
-      font-size: 14px;
-    }
-
-    .carga-error-item {
-      padding: 6px 0;
-      border-bottom: 1px solid #fee2e2;
-      font-size: 13px;
-      color: #2c3e50;
-    }
-
-    .carga-error-item:last-child {
-      border-bottom: none;
-    }
-
-    .carga-error-item .fila {
-      font-weight: 700;
-      color: #e74c3c;
-    }
-  </style>
-
-  <!-- Scripts modulares -->
+  <!-- ═══════════════ SCRIPTS ═══════════════ -->
   <script type="module" src="/js/api.js"></script>
   <script type="module" src="/js/components/modal.js"></script>
   <script type="module" src="/js/components/validation.js"></script>
   <script type="module" src="/js/personal.js"></script>
-</body>
 
+  <script>
+    // Sidebar toggle
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('collapsed');
+      document.getElementById('main').style.marginLeft =
+        document.getElementById('sidebar').classList.contains('collapsed') ? '64px' : '240px';
+    }
+
+    // Clock
+    function updateClock() {
+      const el = document.getElementById('datetime');
+      if (!el) return;
+      const now = new Date();
+      el.textContent = now.toLocaleDateString('es-MX', {
+        weekday: 'short', day: 'numeric', month: 'short'
+      }) + '  ' + now.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+    }
+    updateClock();
+    setInterval(updateClock, 30000);
+
+    // Update KPI stats after data loads
+    function updateStats(data) {
+      if (!data || !data.length) return;
+      document.getElementById('statTotal').textContent   = data.length;
+      document.getElementById('statActivos').textContent = data.filter(p => p.activo).length;
+      const companias = new Set(data.map(p => p.compania).filter(Boolean));
+      document.getElementById('statCompanias').textContent = companias.size;
+      const avg = data.reduce((s, p) => s + Number(p.salario || 0), 0) / data.length;
+      document.getElementById('statSalarioPromedio').textContent = '$' + Math.round(avg).toLocaleString('es-MX');
+    }
+
+    // Hook into PersonalUI after module loads
+    window.addEventListener('load', () => {
+      const interval = setInterval(() => {
+        if (window.PersonalUI) {
+          const origRender = window.PersonalUI.render.bind(window.PersonalUI);
+          window.PersonalUI.render = function() {
+            origRender();
+            updateStats(window.PersonalUI.data);
+          };
+          clearInterval(interval);
+        }
+      }, 100);
+    });
+  </script>
+
+</body>
 </html>
