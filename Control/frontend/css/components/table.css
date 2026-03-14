@@ -106,26 +106,85 @@
 }
 
 /* ── Histórico modal table ──────────────────────────────────── */
-.hist-table .table-header,
-.hist-table .table-row {
-  grid-template-columns:
-    44px           /* ID       */
-    1.6fr          /* Nombre   */
-    1.1fr          /* Cargo    */
-    1.1fr          /* Compañía */
-    60px           /* Total    */
-    70px           /* Pagadas  */
-    80px           /* En deuda */
-    1fr            /* Última   */
-    80px;          /* Rango    */
+/*
+   Columnas en px FIJOS (no fr) para que left: de sticky sea predecible.
+   Suma: 44+190+130+130+64+72+84+130+82 = 926px  →  min-width: 926px
+*/
+.hist-table {
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 52vh;
 }
 
+.hist-table .table-header,
+.hist-table .table-row {
+  display: grid;
+  grid-template-columns:
+    44px    /* ID         */
+    190px   /* Nombre     */
+    130px   /* Cargo      */
+    130px   /* Compañía   */
+    64px    /* Total      */
+    72px    /* Pagadas    */
+    84px    /* En deuda   */
+    130px   /* Últ. fecha */
+    82px;   /* Rango      */
+  min-width: 926px;
+  padding: 0;          /* sin padding lateral — las celdas tienen el suyo */
+  align-items: center;
+}
+
+/* ── Sticky: columna ID ─────────────────────────────────────── */
+.hist-table .col-id {
+  position: sticky;
+  left: 0;
+  z-index: 3;
+  background: #1e2537;   /* mismo que .excel-table */
+}
+
+/* ── Sticky: columna Nombre (left = ancho de col-id = 44px) ─── */
+.hist-table .col-nombre {
+  position: sticky;
+  left: 44px;
+  z-index: 3;
+  background: #1e2537;
+  font-weight: 600;
+}
+
+/* Sombra que indica el límite de scroll */
+.hist-table .col-nombre::after {
+  content: '';
+  position: absolute;
+  top: 0; right: -10px; bottom: 0;
+  width: 10px;
+  background: linear-gradient(to right, rgba(0,0,0,.22), transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Header sticky: tono ligeramente diferente al body */
+.hist-table .table-header .col-id,
+.hist-table .table-header .col-nombre {
+  background: #1a2130;   /* rgba(255,255,255,.03) sobre #1e2537 */
+  z-index: 4;
+}
+
+/* Row hover: actualizar fondo de celdas sticky también */
+.hist-table .table-row:hover .col-id,
+.hist-table .table-row:hover .col-nombre {
+  background: #222d3e;   /* rgba(255,255,255,.025) sobre #1e2537 */
+}
+
+/* Scrollbars del histórico */
+.hist-table::-webkit-scrollbar       { width: 6px; height: 6px; }
+.hist-table::-webkit-scrollbar-track { background: transparent; }
+.hist-table::-webkit-scrollbar-thumb { background: rgba(255,255,255,.12); border-radius: 3px; }
+.hist-table::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.22); }
+
 .col-id       { text-align: center; }
-.col-num      { text-align: center; }
-.col-nombre   { font-weight: 600; }
-.col-cargo    { color: #94a3b8 !important; }
-.col-compania { }
-.col-fecha    { color: #64748b !important; font-size: .8rem !important; }
+.col-num      { text-align: center; font-weight: 600; color: #f1f5f9; }
+.col-cargo    { color: #94a3b8 !important; font-size: .83rem !important; }
+.col-fecha    { color: #64748b !important; font-size: .8rem !important; white-space: nowrap; }
 .col-rango    { text-align: center; }
 
 /* ── Actions cell ───────────────────────────────────────────── */
