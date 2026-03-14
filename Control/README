@@ -25,9 +25,21 @@ Se implementó una arquitectura Modelo-Vista-Controlador (MVC) para separar las 
 ### Portabilidad y Distribución
 El programa utiliza la herramienta pkg para compilar todo el entorno (Node.js, librerías, frontend y assets) en un único archivo ejecutable:
 
-- Ubicación del ejecutable : dist/sistema.exe .
-- Base de Datos : Utiliza SQLite , lo que significa que la base de datos es un simple archivo ( data/app.db ) que se mueve con el programa.
-- Modo Portátil : Cuando se ejecuta como .exe , el programa detecta automáticamente su entorno y guarda la base de datos y los archivos subidos en la carpeta AppData del usuario o junto al ejecutable, evitando problemas de permisos en Windows.
+- Ubicación del ejecutable : sistema.exe (en la raíz del proyecto, junto a las carpetas data/ y uploads/) .
+- Base de Datos : Utiliza SQLite , lo que significa que la base de datos es un simple archivo ( data/app.db ) que se incluye junto al ejecutable y viaja con él (Git, .rar, pendrive, etc.).
+- Modo Portátil : Cuando se ejecuta como .exe , el programa busca la base de datos en este orden de prioridad:
+  1. data/app.db junto al propio .exe  (caso normal al clonar o descomprimir).
+  2. ../data/app.db un nivel arriba del .exe  (compatibilidad con estructura anterior dist/).
+  3. %APPDATA%\MiApp\database\app.db  (instalación nueva sin BD local, crea una vacía).
+- Estructura de distribución correcta :
+  Control/
+    sistema.exe      ← ejecutable
+    data/
+      app.db         ← base de datos con todos los registros
+    uploads/         ← PDFs y archivos subidos
+    backend/
+    frontend/
+    ...
 ### Tecnologías Utilizadas
 - Servidor : Node.js con Express.
 - Base de Datos : SQLite3 (Promisificado para mejor rendimiento).
@@ -38,4 +50,6 @@ El programa utiliza la herramienta pkg para compilar todo el entorno (Node.js, l
 1. Instala las dependencias: npm install
 2. Inicia el servidor de desarrollo: npm run dev (usa nodemon).
 3. Para generar el ejecutable final: npm run build
+   El .exe se genera en la raíz del proyecto (Control/sistema.exe).
+   Asegúrate de que las carpetas data/ y uploads/ estén al mismo nivel que el .exe antes de distribuir.
 Esta estructura garantiza que el sistema sea escalable, permitiendo añadir nuevos módulos en el futuro simplemente siguiendo el patrón MVC ya establecido.

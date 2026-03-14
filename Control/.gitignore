@@ -1,0 +1,61 @@
+# ── Dependencias ──────────────────────────────────────────────
+node_modules/
+
+# ── Carpeta de build antigua (ya no se usa, el .exe ahora va
+#    en la raíz del proyecto junto a data/ y uploads/) ─────────
+dist/
+
+# ── Variables de entorno ──────────────────────────────────────
+.env
+.env.local
+.env.*.local
+
+# ── Logs ──────────────────────────────────────────────────────
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+
+# ── Archivos temporales del sistema operativo ─────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+
+# ── Archivos temporales de carga masiva Excel ─────────────────
+tmp/
+temp/
+
+# ── Editor / IDE ──────────────────────────────────────────────
+.vscode/settings.json
+.idea/
+*.suo
+*.user
+
+# ══════════════════════════════════════════════════════════════
+#  ARCHIVOS QUE SÍ DEBEN ESTAR EN GIT (no ignorar)
+# ══════════════════════════════════════════════════════════════
+#
+#  data/app.db   → Base de datos SQLite con todos los registros
+#                  (personal, callejoneadas, documentos).
+#                  Al clonar el repo ya tendrás los datos.
+#
+#  uploads/      → PDFs y archivos subidos por los usuarios.
+#                  Se incluyen para que estén disponibles al
+#                  clonar sin necesidad de subirlos de nuevo.
+#
+#  sistema.exe   → Ejecutable compilado para distribución.
+#                  Permite correr la app sin instalar Node.js.
+#                  Si lo regeneras: npm run build
+#
+# Ninguno de los anteriores está en este .gitignore a propósito.
+# ══════════════════════════════════════════════════════════════
+
+# Forzar inclusión de la BD y uploads aunque alguna regla global
+# del sistema los pudiera ignorar:
+!data/
+!data/app.db
+!uploads/
+!uploads/**
+!sistema.exe
